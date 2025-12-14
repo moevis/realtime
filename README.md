@@ -53,25 +53,25 @@ graph TD
 
 ## 特性
 
-Playground 工具
+### Playground 工具
 <img width="500" alt="SCR-20251214-syhu" src="https://github.com/user-attachments/assets/fc866d5b-2157-4a0e-b91e-d6eefbcff2fd" />
 
-可追溯日志
+### 可追溯日志
 <img width="500" alt="SCR-20251214-sxmn" src="https://github.com/user-attachments/assets/91690f10-23d6-4be1-9d50-35823e8a8371" />
 
-内置文档
-<img width="500" alt="image" src="https://github.com/user-attachments/assets/f833d9a2-113b-4542-9ef8-39f9c73607cd" />
+### 内置文档
+<img width="500" alt="内置文档截图" src="https://github.com/user-attachments/assets/f833d9a2-113b-4542-9ef8-39f9c73607cd" />
+
+---
 
 ## 安装与运行
 
 可以通过以下方式启动各服务：
 
-vLLM Server: 通过源码运行, 通过Docker运行
-
-Token2Audio Server: 通过 pip 安装运行，通过源码运行, 通过Docker运行
-
-Webrtcvad Server: 通过二进制运行, 通过源码运行, 通过Docker运行
-
-Whisper Server: 通过二进制运行, 通过源码运行, 通过Docker运行
-
-Realtime API: 通过二进制运行, 通过源码运行, 通过Docker运行
+| 服务 | 启动方式 |
+|------|----------|
+| **vLLM Server** | 通过源码运行、通过 Docker 运行 |
+| **Token2Audio Server** | 通过 pip 安装运行、通过源码运行、通过 Docker 运行 |
+| **Webrtcvad Server** | 通过二进制运行、通过源码运行、通过 Docker 运行 |
+| **Whisper Server** | 通过二进制运行、通过源码运行、通过 Docker 运行 |
+| **Realtime API** | 通过二进制运行、通过源码运行、通过 Docker 运行 |
