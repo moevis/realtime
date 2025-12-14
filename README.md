@@ -68,7 +68,7 @@ Playground 工具
 
 vLLM Server: 通过源码运行, 通过Docker运行
 
-Token2Audio Server: 通过二进制运行, 通过源码运行, 通过Docker运行
+Token2Audio Server: 通过 pip 安装运行，通过源码运行, 通过Docker运行
 
 Webrtcvad Server: 通过二进制运行, 通过源码运行, 通过Docker运行
 
