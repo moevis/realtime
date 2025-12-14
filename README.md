@@ -54,13 +54,13 @@ graph TD
 ## 特性
 
 Playground 工具
-<img width="1115" height="794" alt="SCR-20251214-syhu" src="https://github.com/user-attachments/assets/fc866d5b-2157-4a0e-b91e-d6eefbcff2fd" />
+<img width="500" alt="SCR-20251214-syhu" src="https://github.com/user-attachments/assets/fc866d5b-2157-4a0e-b91e-d6eefbcff2fd" />
 
 可追溯日志
-<img width="1121" height="790" alt="SCR-20251214-sxmn" src="https://github.com/user-attachments/assets/91690f10-23d6-4be1-9d50-35823e8a8371" />
+<img width="500" alt="SCR-20251214-sxmn" src="https://github.com/user-attachments/assets/91690f10-23d6-4be1-9d50-35823e8a8371" />
 
 内置文档
-<img width="1967" height="1552" alt="image" src="https://github.com/user-attachments/assets/f833d9a2-113b-4542-9ef8-39f9c73607cd" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/f833d9a2-113b-4542-9ef8-39f9c73607cd" />
 
 ## 安装与运行
 
