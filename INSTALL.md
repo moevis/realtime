@@ -99,8 +99,8 @@ Whisper Server 提供语音转文字（ASR）功能，支持预编译二进制�
 预编译的 Whisper Server 默认有 ggml-base 模型，可通过 API 下载其他模型。
 
 ```bash
-# 1. 下载对应平台的预编译包（替换 vX.X.X 为实际版本号）
-wget https://github.com/stepfun/step-realtime/releases/download/vX.X.X/whisper-server-linux-amd64-vX.X.X.tar.gz
+# 1. 下载对应平台的预编译包（比如 macos）
+wget https://github.com/stepfun-ai/step-realtime/releases/download/0.0.1/whisper-server-linux-arm64.tar.gz
 
 # 2. 解压并进入目录
 tar -xzf whisper-server-linux-amd64-vX.X.X.tar.gz
@@ -114,7 +114,7 @@ cd whisper-server-linux-amd64
 
 ```bash
 # 1. 克隆项目源码
-git clone <repo-url>  # 替换为 Step Realtime 项目仓库地址
+git clone https://github.com/stepfun-ai/step-realtime.git
 cd step-realtime
 
 # 2. 编译 Whisper Server（含 whisper.cpp 依赖库）
@@ -122,7 +122,7 @@ chmod +x scripts/build.sh
 ./scripts/build.sh whisper
 
 # 3. 启动服务（编译产物位于 bin/ 目录）
-./bin/whisper-server -addr=7779 -model_dir=models
+./bin/whisper-server -addr=:7779 -model_dir=models
 ```
 
 ### <a id="whisper-docker"></a>2.3 Docker 部署
@@ -132,8 +132,7 @@ chmod +x scripts/build.sh
 docker run -d \
   --name step-whisper-server \
   -p 7779:7779 \
-  -v whisper-models:/app/models  # 持久化模型数据
-  step-realtime/whisper-server:latest
+  stepfun2025/whisper-server:latest
 ```
 
 ### 2.4 验证
@@ -150,8 +149,8 @@ Webrtcvad Server 提供语音活动检测（VAD）功能，支持三种部署方
 ### <a id="webrtcvad-binary"></a>3.1 预编译二进制部署（推荐）
 
 ```bash
-# 1. 下载预编译包（替换 vX.X.X 为实际版本号）
-wget https://github.com/stepfun/step-realtime/releases/download/vX.X.X/webrtcvad-server-linux-amd64-vX.X.X.tar.gz
+# 1. 下载预编译包
+wget https://github.com/stepfun-ai/step-realtime/releases/download/0.0.1/webrtcvad-server-linux-amd64.tar.gz
 
 # 2. 解压并启动
 tar -xzf webrtcvad-server-linux-amd64-vX.X.X.tar.gz
@@ -163,7 +162,7 @@ cd webrtcvad-server-linux-amd64
 
 ```bash
 # 1. 克隆项目源码
-git clone <repo-url>
+git clone https://github.com/stepfun-ai/step-realtime.git
 cd step-realtime
 
 # 2. 编译 Webrtcvad Server
@@ -181,8 +180,7 @@ chmod +x scripts/build.sh
 docker run -d \
   --name step-webrtcvad-server \
   -p 7778:7778 \
-  step-realtime/server:latest \
-  /app/webrtcvad-server -addr=:7778
+  stepfun2025/webrtcvad-server:latest
 ```
 
 ### 2.4 验证
@@ -241,8 +239,7 @@ docker run -d \
   --name step-token2audio-server \
   --gpus all \
   -p 7780:7780 \
-  step-realtime/token2audio-server:latest \
-  /app/token2audio-server
+  stepfun2025/token2audio-server:latest
 ```
 
 ### 4.4 验证
@@ -251,7 +248,6 @@ docker run -d \
 
 <img width="500" alt="image" src="https://github.com/user-attachments/assets/38c6003c-9b28-4adc-97cb-0bbc230aceb0" />
 
-
 ## 5. Realtime API Server 部署
 
 Realtime API Server 是系统入口组件，聚合所有子服务功能，支持三种部署方式。
@@ -259,13 +255,13 @@ Realtime API Server 是系统入口组件，聚合所有子服务功能，支持
 ### <a id="realtime-binary"></a>5.1 预编译二进制部署（推荐）
 
 ```bash
-# 1. 下载预编译包（替换 vX.X.X 为实际版本号）
+# 1. 下载预编译包
 
-wget https://github.com/stepfun/step-realtime/releases/download/vX.X.X/server-linux-amd64-vX.X.X.tar.gz
+wget https://github.com/stepfun-ai/step-realtime/releases/download/0.0.1/realtime-server-linux-amd64.tar.gz
 
 # 2. 解压并进入目录
 
-tar -xzf server-linux-amd64-vX.X.X.tar.gz
+tar -xzf realtime-server-linux-amd64.tar.gz
 cd server-linux-amd64
 
 # 3. 启动服务（指定配置文件，需提前配置子服务地址）
@@ -276,7 +272,7 @@ cd server-linux-amd64
 
 ```bash
 # 1. 克隆项目源码
-git clone <repo-url>
+git clone https://github.com/stepfun-ai/step-realtime
 cd step-realtime
 
 # 2. 编译所有组件（含 Realtime Server 及子服务）
@@ -297,7 +293,7 @@ docker run -d \
   --name step-realtime-server \
   -p 7777:7777 \
   -v $(pwd)/conf.yaml:/app/conf.yaml:ro \
-  step-realtime/server:latest \
+  stepfun2025/step-realtime:latest \
   /app/server -addr=:7777 -config=/app/conf.yaml
 ``` 
 
