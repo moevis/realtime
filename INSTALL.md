@@ -4,15 +4,15 @@
 
 我们提供了多种安装和部署 Step Realtime API Server 的方式，包含预编译二进制文件、本地源码编译以及 Docker 部署等，用户可以根据自身需求选择合适的方式进行安装。
 
-部分服务（如 vLLM Server、Token2Audio Server）依赖 GPU 加速，建议提前准备满足需求的硬件环境；所有命令默认基于 Linux/macOS 系统，Windows 系统需适配相应命令（如替换 `wget` 为浏览器下载、调整路径分隔符等）。
+部分服务（如 vLLM Server、Token2Audio Server）依赖 GPU 加速，建议提前准备满足需求的硬件环境。
 
 | 服务 | 启动方式 |
 |------|----------|
-| **vLLM Server** | 通过源码运行、通过 Docker 运行 |
-| **Token2Audio Server** | 通过 pip 安装运行、通过源码运行、通过 Docker 运行 |
-| **Webrtcvad Server** | 通过二进制运行、通过源码运行、通过 Docker 运行 |
-| **Whisper Server** | 通过二进制运行、通过源码运行、通过 Docker 运行 |
-| **Realtime API** | 通过二进制运行、通过源码运行、通过 Docker 运行 |
+| **vLLM Server** | [通过源码运行](#vllm-source-compilation)、[通过 Docker 运行](#vllm-docker) |
+| **Token2Audio Server** | [通过 pip 安装运行](#token2audio-pip)、[通过源码运行](#token2audio-source-compilation)、[通过 Docker 运行](#token2audio-docker) |
+| **Webrtcvad Server** | [通过二进制运行](#webrtcvad-binary)、[通过源码运行](#webrtcvad-source-compilation)、[通过 Docker 运行](#webrtcvad-docker) |
+| **Whisper Server** | [通过二进制运行](#whisper-binary)、[通过源码运行](#whisper-source-compilation)、[通过 Docker 运行](#whisper-docker) |
+| **Realtime API** | [通过二进制运行](#realtime-binary)、[通过源码运行](#realtime-source-compilation)、[通过 Docker 运行](#realtime-docker) |
 
 ## 1. vLLM Chat Server 部署
 
@@ -35,7 +35,7 @@ hf download stepfun-ai/Step-Audio-2-mini --local-dir ./chat-model
 
 下载完成后，./chat-model 目录包含模型权重、配置文件及 Token2Audio 辅助模型。
 
-### 1.2 源码编译部署
+### <a id="vllm-source-compilation"></a>1.2 源码编译部署
 
 ```bash
 # 1. 克隆定制化 vLLM 源码（适配 Step-Audio-2 模型）
@@ -52,7 +52,7 @@ git checkout step-audio-2-mini
 python3 -m vllm.entrypoints.openai.api_server \
     --model ./chat-model  # 模型下载目录
     --served-model-name step-audio-2-mini \
-    --port 8080 \
+    --port 7781 \
     --host 0.0.0.0 \
     --max-model-len 65536  # 模型最大序列长度（影响显存占用）
     --max-num-seqs 128      # 最大并发序列数（影响吞吐量）
@@ -69,7 +69,7 @@ python3 -m vllm.entrypoints.openai.api_server \
 | `--tensor-parallel-size` | 占用 GPU 数量 | 与实际 GPU 数量一致（单卡设为 1） |
 
 
-### 1.3 Docker 部署
+### <a id="vllm-docker"></a>1.3 Docker 部署
 
 ```bash
 # 1. 拉取预编译镜像
@@ -78,11 +78,11 @@ docker pull stepfun2025/vllm:step-audio-2-v20250909
 # 2. 启动容器（映射模型目录和端口）
 docker run --rm -ti --gpus all \
     -v $(pwd)/chat-model:/step-audio-2-mini  # 本地模型目录映射到容器
-    -p 8080:8080 \
+    -p 7781:7781 \
     stepfun2025/vllm:step-audio-2-v20250909 \
     -- vllm serve /step-audio-2-mini \
     --served-model-name step-audio-2-mini \
-    --port 8080 \
+    --port 7781 \
     --max-model-len 65536 \
     --max-num-seqs 128 \
     --tensor-parallel-size 4 \
@@ -94,7 +94,7 @@ docker run --rm -ti --gpus all \
 
 Whisper Server 提供语音转文字（ASR）功能，支持预编译二进制、源码编译和 Docker 三种部署方式。
 
-### 2.1 预编译二进制部署
+### <a id="whisper-binary"></a>2.1 预编译二进制部署
 
 预编译的 Whisper Server 默认有 ggml-base 模型，可通过 API 下载其他模型。
 
@@ -110,7 +110,7 @@ cd whisper-server-linux-amd64
 ./whisper-server -addr=:7779 -model_dir=models  # model_dir 为模型存储目录
 ```
 
-### 2.2 源码编译部署
+### <a id="whisper-source-compilation"></a>2.2 源码编译部署
 
 ```bash
 # 1. 克隆项目源码
@@ -125,7 +125,7 @@ chmod +x scripts/build.sh
 ./bin/whisper-server -addr=7779 -model_dir=models
 ```
 
-### 2.3 Docker 部署
+### <a id="whisper-docker"></a>2.3 Docker 部署
 
 ```bash
 # 启动容器（内置 ggml-base 模型，映射模型存储卷）
@@ -136,11 +136,18 @@ docker run -d \
   step-realtime/whisper-server:latest
 ```
 
+### 2.4 验证
+
+浏览器打开端口 7779，可以上传 wav 测试 asr 功能。
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/6467547c-567b-4251-a301-b39306f719e9" />
+
+
 ## 3. Webrtcvad Server 部署
 
 Webrtcvad Server 提供语音活动检测（VAD）功能，支持三种部署方式。
 
-### 3.1 预编译二进制部署（推荐）
+### <a id="webrtcvad-binary"></a>3.1 预编译二进制部署（推荐）
 
 ```bash
 # 1. 下载预编译包（替换 vX.X.X 为实际版本号）
@@ -152,7 +159,7 @@ cd webrtcvad-server-linux-amd64
 ./webrtcvad-server -addr=:7778
 ```
 
-### 3.2 源码编译部署
+### <a id="webrtcvad-source-compilation"></a>3.2 源码编译部署
 
 ```bash
 # 1. 克隆项目源码
@@ -167,7 +174,7 @@ chmod +x scripts/build.sh
 ./bin/webrtcvad-server -addr=:7778
 ```
 
-### 3.3 Docker 部署
+### <a id="webrtcvad-docker"></a>3.3 Docker 部署
 
 ```bash
 # 启动容器
@@ -178,11 +185,18 @@ docker run -d \
   /app/webrtcvad-server -addr=:7778
 ```
 
+### 2.4 验证
+
+浏览器打开端口 7778，可以上传 wav 测试 vad 功能。
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/83062792-df21-4a2b-8004-02d24b7efb2c" />
+
+
 ## 4. Token2Audio Server 部署
 
 Token2Audio Server 提供 Token 转语音功能，支持 Pip 安装、源码编译和 Docker 三种部署方式。
 
-### 4.1 Pip 安装部署（推荐，快速启动）
+### <a id="token2audio-pip"></a>4.1 Pip 安装部署（推荐，快速启动）
 
 ```bash
 # 1. 安装 Token2Audio 包
@@ -204,7 +218,22 @@ python -m token2audio.download /path/to/token2audio-model  # 模型存储路径
 python -m token2audio.server --model-dir /path/to/token2audio-model --port 7780
 ```
 
-### 4.3 Docker 部署
+### <a id="token2audio-source-compilation"></a>4.2 源码编译部署
+
+```bash
+# 1. 克隆项目源码
+git clone <repo-url>
+cd step-realtime
+
+# 2. 编译 Token2Audio Server
+chmod +x scripts/build.sh
+./scripts/build.sh token2audio
+
+# 3. 启动服务
+./bin/token2audio-server --model-dir /path/to/token2audio-model --port 7780
+```
+
+### <a id="token2audio-docker"></a>4.3 Docker 部署
 
 ```bash
 # 启动容器（内置默认模型，GPU 加速）
@@ -216,11 +245,18 @@ docker run -d \
   /app/token2audio-server
 ```
 
+### 4.4 验证
+
+浏览器打开 7780，可以输入 token 测试语音生成功能。
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/38c6003c-9b28-4adc-97cb-0bbc230aceb0" />
+
+
 ## 5. Realtime API Server 部署
 
 Realtime API Server 是系统入口组件，聚合所有子服务功能，支持三种部署方式。
 
-### 5.1 预编译二进制部署（推荐）
+### <a id="realtime-binary"></a>5.1 预编译二进制部署（推荐）
 
 ```bash
 # 1. 下载预编译包（替换 vX.X.X 为实际版本号）
@@ -236,7 +272,7 @@ cd server-linux-amd64
 ./server -addr=:7777 -config=conf.yaml
 ```
 
-### 5.2 源码编译部署
+### <a id="realtime-source-compilation"></a>5.2 源码编译部署
 
 ```bash
 # 1. 克隆项目源码
@@ -251,7 +287,7 @@ chmod +x scripts/build.sh
 ./bin/server -addr=:7777 -config=conf.yaml
 ```
 
-### 5.3 Docker 部署
+### <a id="realtime-docker"></a>5.3 Docker 部署
 
 #### 5.3.1 单独启动容器
 
@@ -282,7 +318,7 @@ asr:
 # 对话服务（vLLM Chat Server）配置
 chat:
   - model: step-audio-2-mini  # 与 vLLM Server 配置的模型名称一致
-    url: http://localhost:8080/v1/chat/completions  # vLLM Server 地址
+    url: http://localhost:7781/v1/chat/completions  # vLLM Server 地址
     instructions: 你是一个 AI 机器人  # 系统提示词
     top_p: 0.7  # 采样 Top P 参数
     temperature: 0.7  # 生成多样性控制（0~1）
