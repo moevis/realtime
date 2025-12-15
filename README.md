@@ -68,7 +68,7 @@ graph TD
 
 ## 部署手册
 
-[部署](./install.zh.md)
+[部署](./INSTALL.md)
 
 ## 协议
 
