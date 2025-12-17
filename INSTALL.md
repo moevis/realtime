@@ -262,10 +262,10 @@ wget https://github.com/stepfun-ai/step-realtime/releases/download/0.0.1/realtim
 # 2. 解压并进入目录
 
 tar -xzf realtime-server-linux-amd64.tar.gz
-cd server-linux-amd64
+cd realtime-server-linux-amd64
 
 # 3. 启动服务（指定配置文件，需提前配置子服务地址）
-./server -addr=:7777 -config=conf.yaml
+./realtime-server -addr=:7777 -config=conf.yaml
 ```
 
 ### <a id="realtime-source-compilation"></a>5.2 源码编译部署
@@ -280,7 +280,7 @@ chmod +x scripts/build.sh
 ./scripts/build.sh all  # 编译产物位于 bin/ 目录
 
 # 3. 启动服务（需先启动所有子服务）
-./bin/server -addr=:7777 -config=conf.yaml
+./bin/realtime-server -addr=:7777 -config=conf.yaml
 ```
 
 ### <a id="realtime-docker"></a>5.3 Docker 部署
@@ -293,8 +293,7 @@ docker run -d \
   --name step-realtime-server \
   -p 7777:7777 \
   -v $(pwd)/conf.yaml:/app/conf.yaml:ro \
-  stepfun2025/step-realtime:latest \
-  /app/server -addr=:7777 -config=/app/conf.yaml
+  stepfun2025/step-realtime:latest
 ``` 
 
 ## 6. 配置文件说明
