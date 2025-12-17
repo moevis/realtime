@@ -43,7 +43,7 @@ Playground 工具
 | WebRTC VAD Server | 7778 | 语音活动检测服务，CPU 环境运行 |
 | Whisper Server | 7779 | 语音识别服务 (ASR)，可在 CPU/GPU 环境运行 |
 | Token2Audio Server | 7780 | 文本转语音服务，可在 CPU/GPU 环境运行，极其推荐适用 GPU，若不配置将不会有声音生成 |
-| Chat Server | - | LLM 推理服务，需要运行在 GPU 环境中 |
+| Chat Server | 7781 | LLM 推理服务，需要运行在 GPU 环境中 |
 
 依赖模型：
 - step-audio2 模型（vllm-server）：modelscope or huggingface，需要预先下载。
